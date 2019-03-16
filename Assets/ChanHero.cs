@@ -14,7 +14,7 @@ public class ChanHero : MonoBehaviour
     private GameScene scene = null;
 
     [SerializeField]
-    private int HP = 100;
+    public int HP = 100;
 
     public int MaxHp = 50;
 
@@ -69,7 +69,7 @@ public class ChanHero : MonoBehaviour
         if(collision.gameObject.tag == "Obta")
         {
             obstacleManager.Hit(collision.gameObject);
-            HP -= 7;
+            HP -= (int)Random.Range(4, 9);
             if(HP <= 0)
             {
                 HP = 0;

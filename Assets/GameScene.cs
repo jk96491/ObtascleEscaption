@@ -80,7 +80,7 @@ public class GameScene : MonoBehaviour {
             isEndGame = true;
             ResultUi.gameObject.SetActive(true);
             ResultUi.SetResult(true);
-            ResultUi.SetScoreLabel(50);
+            ResultUi.SetScoreLabel(chanHero.HP * 100);
         }
     }
 
