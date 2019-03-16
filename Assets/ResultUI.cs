@@ -8,6 +8,8 @@ public class ResultUI : MonoBehaviour
     private GameObject WinObj = null;
     [SerializeField]
     private GameObject LoseObj = null;
+    [SerializeField]
+    private UILabel ScoreLabel = null;
     
     public void SetResult(bool Win)
     {
@@ -20,4 +22,12 @@ public class ResultUI : MonoBehaviour
             LoseObj.SetActive(!Win);
         }
     }    
+
+    public void SetScoreLabel(int Score)
+    {
+        if(null != ScoreLabel)
+        {
+            ScoreLabel.text = string.Format("Score : {0}", Score);
+        }
+    }
 }

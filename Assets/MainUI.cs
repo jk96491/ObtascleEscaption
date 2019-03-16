@@ -19,7 +19,15 @@ public class MainUI : MonoBehaviour {
     [SerializeField]
     private PauseUI pauseUI = null;
 
-    public float gameTime = 0f;
+    [Header("[게임 시작 연출]")]
+    [SerializeField]
+    private TweenPosition tipLabelTweenPos = null;
+    [SerializeField]
+    private TweenScale tipLabelTweenScale = null;
+
+    public delegate void EndFinishGameStartEffectDel();
+    public EndFinishGameStartEffectDel endFinishGameStartEffectDel = null;
+
     public float moveVecX = 0f;
 
     private void Start()
@@ -33,13 +41,16 @@ public class MainUI : MonoBehaviour {
         {
             RightArrowEventListner.onPress = OnPress;
         }
+
+        if (null != tipLabelTweenPos)
+            tipLabelTweenPos.SetOnFinished(OnFinishGameStartEffect);
     }
 
     public void UpdateFrame(float time_)
     {
-        gameTime += time_;
+        scene.gameTime += time_;
         if (null != gameTimeLabel)
-            gameTimeLabel.text = ((int)gameTime).ToString();
+            gameTimeLabel.text = ((int)scene.gameTime).ToString();
     }
 
     private void OnPress(GameObject Obj, bool Press)
@@ -104,9 +115,44 @@ public class MainUI : MonoBehaviour {
     
     public void HandleOnClickPauseBtn()
     {
+        if (true == scene.isPaused)
+            return;
+
         if (null != pauseUI)
             pauseUI.gameObject.SetActive(true);
 
         scene.isPaused = true;
+    }
+
+    public void PlayGameStartEffect()
+    {
+        tipLabelTweenPos.gameObject.SetActive(true);
+        tipLabelTweenPos.enabled = true;
+        tipLabelTweenScale.enabled = true;
+
+        if (null != tipLabelTweenPos)
+            tipLabelTweenPos.PlayForward();
+
+        if (null != tipLabelTweenScale)
+            tipLabelTweenScale.PlayForward();
+    }
+
+    public void OnFinishGameStartEffect()
+    {
+        StartCoroutine(DelayFinishGameStartEffect());
+    }
+
+    IEnumerator DelayFinishGameStartEffect()
+    {
+        yield return new WaitForSeconds(1f);
+
+
+        tipLabelTweenPos.gameObject.SetActive(false);
+
+        tipLabelTweenPos.ResetToBeginning();
+        tipLabelTweenScale.ResetToBeginning();
+
+        if (null != endFinishGameStartEffectDel)
+            endFinishGameStartEffectDel();
     }
 }

@@ -14,6 +14,10 @@ public class GameScene : MonoBehaviour {
     [SerializeField]
     private ResultUI ResultUi = null;
 
+    public const int GamePlayTime = 10;
+
+    public float gameTime = 0f;
+
     public MainUI mainUI { get { return MainUi; } }
     public PauseUI pauseUI { get { return PauseUi; } }
     public ResultUI resultUI { get { return ResultUi; } }
@@ -44,6 +48,16 @@ public class GameScene : MonoBehaviour {
 
     private void Start()
     {
+        MainUi.endFinishGameStartEffectDel += EndFinishGameStartEffectDel;
+        isPaused = true;
+
+        StartCoroutine(GameStartDelay());
+    }
+
+    IEnumerator GameStartDelay()
+    {
+        yield return new WaitForSeconds(0.5f);
+        PlayGameStart();
     }
 
     void Update ()
@@ -55,8 +69,19 @@ public class GameScene : MonoBehaviour {
             time = 0;
         }
 
-        obstacleManager.UpdateFrame(time * 3); // 이 값이 클수록 속도는 빨라진다
+        if(false == isPaused)
+            obstacleManager.UpdateFrame(time * 3); // 이 값이 클수록 속도는 빨라진다
         mainUI.UpdateFrame(time);
+
+        if(gameTime >= GamePlayTime)
+        {
+            gameTime = GamePlayTime;
+            isPaused = true;
+            isEndGame = true;
+            ResultUi.gameObject.SetActive(true);
+            ResultUi.SetResult(true);
+            ResultUi.SetScoreLabel(50);
+        }
     }
 
     private void LateUpdate()
@@ -68,5 +93,16 @@ public class GameScene : MonoBehaviour {
             chanHero.UpdateMoveXValue(mainUI.moveVecX);
             chanHero.LateUpdateFrame(time);
         }
+    }
+
+    public void PlayGameStart()
+    {
+        MainUi.PlayGameStartEffect();
+    }
+
+    public void EndFinishGameStartEffectDel()
+    {
+        isPaused = false;
+        isEndGame = false;
     }
 }

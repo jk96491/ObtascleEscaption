@@ -75,6 +75,9 @@ public class ChanHero : MonoBehaviour
                 HP = 0;
                 scene.isPaused = true;
                 scene.isEndGame = true;
+
+                scene.resultUI.gameObject.SetActive(true);
+                scene.resultUI.SetResult(false);
             }
             scene.mainUI.SetHpInfo(HP, MaxHp, (float)HP / MaxHp);
         }
