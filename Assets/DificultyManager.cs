@@ -6,9 +6,14 @@ public class DificultyManager : MonoSingleton<DificultyManager>
 {
     public GameScene.Difficulty dificulty = GameScene.Difficulty.EASY;
 
+    public bool IsObjCreated = false;
 
     private void Start()
     {
-        DontDestroyOnLoad(gameObject);
+        if(false == IsObjCreated)
+        {
+            IsObjCreated = true;
+            DontDestroyOnLoad(gameObject);
+        }
     }
 }

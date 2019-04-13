@@ -5,6 +5,11 @@ using UnityEngine.SceneManagement;
 
 public class TitleScene : MonoBehaviour
 {
+    private void Start()
+    {
+        DontDestroyOnLoad(DificultyManager.Instant.gameObject);
+    }
+
     public void HandleOnClickEasyBtn()
     {
         DificultyManager.Instant.dificulty = GameScene.Difficulty.EASY;
