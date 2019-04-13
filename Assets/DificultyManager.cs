@@ -5,5 +5,10 @@ using UnityEngine;
 public class DificultyManager : MonoSingleton<DificultyManager>
 {
     public GameScene.Difficulty dificulty = GameScene.Difficulty.EASY;
-    
+
+
+    private void Start()
+    {
+        DontDestroyOnLoad(gameObject);
+    }
 }
