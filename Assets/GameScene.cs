@@ -126,6 +126,7 @@ public class GameScene : MonoBehaviour
         if(null != DificultyManager.Instant)
             gameDifficulty = DificultyManager.Instant.dificulty;
         MainUi.PlayGameStartEffect();
+        obstacleManager.ResetAllObtascle();
     }
 
     public void EndFinishGameStartEffectDel()

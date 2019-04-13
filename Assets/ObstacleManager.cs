@@ -107,4 +107,12 @@ public class ObstacleManager : MonoBehaviour
         obstacles.delayCount = 0;
         usedPosition[obstacles.usedPosIndex] = false;
     }
+
+    public void ResetAllObtascle()
+    {
+        for (int i = 0; i < obstacles.Count; i++)
+        {
+            ResetObstacles(obstacles[i]);
+        }
+    }
 }
