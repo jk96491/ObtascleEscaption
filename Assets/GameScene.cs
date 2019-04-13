@@ -2,7 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameScene : MonoBehaviour {
+public class GameScene : MonoBehaviour
+{
+    public enum Difficulty : int
+    {
+        NONE = -1,
+        EASY,
+        NORMAL,
+        HARD,
+        HELL
+    }
+
+    [System.Serializable]
+    public class DifficultyManager
+    {
+        public int speed;
+        public int delayCount;
+    }
+
     [SerializeField]
     private ChanHero chanHero = null;
     [SerializeField]
@@ -13,6 +30,11 @@ public class GameScene : MonoBehaviour {
     private PauseUI PauseUi = null;
     [SerializeField]
     private ResultUI ResultUi = null;
+
+    [SerializeField]
+    private DifficultyManager[] difficultyManager = null;
+
+    public Difficulty gameDifficulty = Difficulty.NORMAL;
 
     public const int GamePlayTime = 10;
 
@@ -70,17 +92,21 @@ public class GameScene : MonoBehaviour {
         }
 
         if(false == isPaused)
-            obstacleManager.UpdateFrame(time * 3); // 이 값이 클수록 속도는 빨라진다
+        {
+            DifficultyManager difficulty = GetCurrentDifficultyInfo();
+            obstacleManager.UpdateFrame(time * difficulty.speed); // 이 값이 클수록 속도는 빨라진다
+        }
         mainUI.UpdateFrame(time);
+        chanHero.UpdateFrame(time);
 
-        if(gameTime >= GamePlayTime)
+        if (gameTime >= GamePlayTime)
         {
             gameTime = GamePlayTime;
             isPaused = true;
             isEndGame = true;
             ResultUi.gameObject.SetActive(true);
             ResultUi.SetResult(true);
-            ResultUi.SetScoreLabel(chanHero.HP * 100);
+            ResultUi.SetScoreLabel(chanHero.HP * 100 * ((int)(gameDifficulty + 1)) / 4);
         }
     }
 
@@ -97,6 +123,8 @@ public class GameScene : MonoBehaviour {
 
     public void PlayGameStart()
     {
+        if(null != DificultyManager.Instant)
+            gameDifficulty = DificultyManager.Instant.dificulty;
         MainUi.PlayGameStartEffect();
     }
 
@@ -104,5 +132,10 @@ public class GameScene : MonoBehaviour {
     {
         isPaused = false;
         isEndGame = false;
+    }
+
+    public DifficultyManager GetCurrentDifficultyInfo()
+    {
+        return difficultyManager[(int)gameDifficulty];
     }
 }

@@ -23,19 +23,46 @@ public class ChanHero : MonoBehaviour
 
     public void Start()
     {
+        SetHpInit();
+    }
+
+    public void SetHpInit()
+    {
         HP = MaxHp;
         scene.mainUI.SetHpInfo(HP, MaxHp, (float)HP / MaxHp);
     }
 
+    public void UpdateFrame(float dt)
+    {
+
+#if UNITY_ANDROID
+        
+        return;
+#endif
+        float H = Input.GetAxis("Horizontal");
+
+        if (H > 0)
+            moveVec = 1;
+        else if (H < 0)
+            moveVec = -1;
+        else
+            moveVec = 0;
+    }
+
     public void UpdateMoveXValue(float moveVec_)
     {
+#if UNITY_ANDROID
         moveVec = moveVec_;
+#endif
     }
 
     public void LateUpdateFrame(float time_)
     {
         if (scene.isPaused == true)
             moveVec = 0;
+
+
+        Debug.LogError(moveVec);
 
         if (moveVec == 1)
             chanTran.transform.localRotation = Quaternion.Euler(0, 90, 0);

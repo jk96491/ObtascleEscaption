@@ -18,6 +18,12 @@ public class MainUI : MonoBehaviour {
     private GameScene scene = null;
     [SerializeField]
     private PauseUI pauseUI = null;
+    [SerializeField]
+    private ResultUI resultUI;
+    [SerializeField]
+    private ChanHero hero;
+    [SerializeField]
+    private GameObject MoveButtonObj = null;
 
     [Header("[게임 시작 연출]")]
     [SerializeField]
@@ -44,6 +50,15 @@ public class MainUI : MonoBehaviour {
 
         if (null != tipLabelTweenPos)
             tipLabelTweenPos.SetOnFinished(OnFinishGameStartEffect);
+
+        if(null != MoveButtonObj)
+        {
+#if UNITY_ANDROID
+            MoveButtonObj.SetActive(true);
+#else
+            MoveButtonObj.SetActive(false);
+#endif
+        }
     }
 
     public void UpdateFrame(float time_)
@@ -126,6 +141,9 @@ public class MainUI : MonoBehaviour {
 
     public void PlayGameStartEffect()
     {
+        hero.SetHpInit();
+        scene.gameTime = 0;
+        resultUI.gameObject.SetActive(false);
         tipLabelTweenPos.gameObject.SetActive(true);
         tipLabelTweenPos.enabled = true;
         tipLabelTweenScale.enabled = true;

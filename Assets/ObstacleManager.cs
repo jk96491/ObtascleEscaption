@@ -14,6 +14,8 @@ public class ObstacleManager : MonoBehaviour
     private List<Transform> startPosTranses = new List<Transform>();
     [SerializeField]
     private List<bool> usedPosition = new List<bool>();
+    [SerializeField]
+    private GameScene gameScene = null;
 
     public void Start()
     {
@@ -47,7 +49,9 @@ public class ObstacleManager : MonoBehaviour
                
                 if(rand < 5)
                 {
-                    if(obstacles[i].delayCount > 5) // 이 값이 클수록 적게 떨어진다
+                    GameScene.DifficultyManager difficulty = gameScene.GetCurrentDifficultyInfo();
+
+                    if(obstacles[i].delayCount > difficulty.delayCount) // 이 값이 클수록 적게 떨어진다
                     {
                         int posIndex = Random.Range(0, 11);
 
